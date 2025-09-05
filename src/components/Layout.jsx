@@ -217,7 +217,7 @@ const Layout = ({ children }) => {
       <Box component="footer" sx={{ py: 3, px: 2, mt: 'auto', backgroundColor: 'grey.800', color: 'white', zIndex: 1100, position: 'sticky', bottom: 0 }}>
         <Container maxWidth="sm">
           <Typography variant="body1" align="center">
-            © {new Date().getFullYear()} NUNUWA. Tous droits réservés.
+            © {new Date().getFullYear()} NUNUWA. Jonathan tshitola
           </Typography>
         </Container>
       </Box>
