@@ -1,24 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Store from './pages/Store';
+import ProductManager from './pages/ProductManager';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Confirmation from './pages/Confirmation';
+import Orders from './pages/Orders';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Profile from './pages/Profile'; // Importez la nouvelle page de profil
+import AdminRoute from './components/AdminRoute';
+import { CartProvider } from './context/CartContext';
+import { ThemeModeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import CssBaseline from '@mui/material/CssBaseline';
+import ForgotPassword from './pages/ForgotPassword';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <ThemeModeProvider>
+        <CssBaseline />
+        <Router>
+          <CartProvider>
+            <Routes>
+              <Route path="/" element={<Store />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/confirmation" element={<Confirmation />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route 
+                path="/admin-dashboard"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route 
+                path="/manager" 
+                element={
+                  <AdminRoute>
+                    <ProductManager />
+                  </AdminRoute>
+                } 
+              />
+            </Routes>
+          </CartProvider>
+        </Router>
+      </ThemeModeProvider>
+    </AuthProvider>
   );
 }
 
