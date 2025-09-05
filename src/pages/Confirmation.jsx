@@ -17,11 +17,11 @@ const Confirmation = () => {
             Merci pour votre commande !
           </Typography>
           <Typography variant="body1" sx={{ mt: 2, mb: 3 }}>
-            Pour finaliser votre achat, veuillez faire un dépôt du montant total sur le numéro de mobile money suivant :
+            Pour finaliser votre achat, veuillez faire un dépôt du montant total sur le numéro  de mobile money suivant :
           </Typography>
           <Typography variant="h5" color="primary" sx={{ mb: 3 }}>
-            +243 XX XX XX XXX
-          </Typography>
+            +243 977 098 016 airtel money
+           </Typography>
           <Typography variant="body2" color="text.secondary">
             
             <br />
