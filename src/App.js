@@ -16,6 +16,7 @@ import { AuthProvider } from './context/AuthContext';
 import CssBaseline from '@mui/material/CssBaseline';
 import ForgotPassword from './pages/ForgotPassword';
 import AdminDashboard from './pages/AdminDashboard';
+import ProductDetails from './pages/ProductDetails'; 
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <CartProvider>
             <Routes>
               <Route path="/" element={<Store />} />
+              <Route path="/product/:productId" element={<ProductDetails />} /> 
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/confirmation" element={<Confirmation />} />

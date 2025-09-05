@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, CircularProgress, Alert, Paper, TextField, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import { Search as SearchIcon, AddShoppingCart as AddShoppingCartIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useCart } from '../context/CartContext';
 import { db } from '../services/firebase-config';
+import ProductDetail from '../pages/ProductDetails';
 import { collection, onSnapshot, getDocs } from 'firebase/firestore';
 
 const Store = () => {
@@ -47,6 +48,12 @@ const Store = () => {
 
     return () => unsubscribe();
   }, []);
+
+  const handleAddToCart = (event, product) => {
+    event.stopPropagation(); // Prevents the link from being triggered
+    event.preventDefault(); // Prevents default link behavior
+    addToCart(product);
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -167,13 +174,56 @@ const Store = () => {
                 {groupedProducts[categoryName].map(product => (
                   <Grid item key={product.id} xs={12} sm={6} md={3}>
                     <Link to={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
-                      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 2, transition: 'transform 0.2s, box-shadow 0.2s', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
-                        <CardMedia
-                          component="img"
-                          image={product.imageUrl || "https://via.placeholder.com/400x300?text=Image+Produit"}
-                          alt={product.name}
-                          sx={{ height: 160, objectFit: 'cover' }}
-                        />
+                      <Card sx={{ 
+                        height: '100%', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        borderRadius: 2, 
+                        transition: 'transform 0.2s, box-shadow 0.2s', 
+                        position: 'relative', // Necessary for absolute positioning of overlay
+                        overflow: 'hidden', // Hides anything that overflows the Card
+                        '&:hover': { 
+                          transform: 'translateY(-5px)', 
+                          boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                          '& .product-overlay': { // Select the overlay on hover
+                            opacity: 1,
+                          },
+                          '& .add-to-cart-button': { // Select the button on hover
+                            transform: 'translateY(0)',
+                          }
+                        } 
+                      }}>
+                        <Box sx={{ position: 'relative' }}>
+                          <CardMedia
+                            component="img"
+                            image={product.imageUrl || "https://via.placeholder.com/400x300?text=Image+Produit"}
+                            alt={product.name}
+                            sx={{ height: 160, objectFit: 'cover' }}
+                          />
+                          {/* The hover overlay */}
+                          <Box 
+                            className="product-overlay"
+                            sx={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                              backgroundColor: 'rgba(0,0,0,0.5)',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              opacity: 0,
+                              transition: 'opacity 0.3s ease',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <Typography variant="h6" color="white" sx={{ fontWeight: 'bold' }}>
+                              Voir détail
+                            </Typography>
+                          </Box>
+                        </Box>
+
                         <CardContent sx={{ flexGrow: 1, p: 2 }}>
                           <Typography gutterBottom variant="subtitle1" component="div" sx={{ fontWeight: 'bold' }}>
                             {product.name}
@@ -185,6 +235,22 @@ const Store = () => {
                             <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
                               {product.price.toFixed(2)} USD
                             </Typography>
+                            {/* Always visible add-to-cart button */}
+                            <Button 
+                              variant="contained" 
+                              color="primary" 
+                              size="small"
+                              onClick={(event) => handleAddToCart(event, product)}
+                              sx={{
+                                minWidth: 'auto',
+                                px: 1.5,
+                                py: 0.5,
+                                borderRadius: '50px',
+                                transition: 'transform 0.3s ease',
+                              }}
+                            >
+                              <AddShoppingCartIcon fontSize="small" />
+                            </Button>
                           </Box>
                         </CardContent>
                       </Card>
